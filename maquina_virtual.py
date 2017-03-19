@@ -78,12 +78,10 @@ def execute(type, data):
 #Interpreter
 PC = starting_adress
 while run_bit:
-    print values
     instr = memory[PC]
     PC = PC + 1
     instr_type = get_instr_type(instr)
     data_loc = find_data(instr, instr_type)
     execute (instr_type, data_loc)
-    print values
     if PC>=len(memory):
         run_bit = False
