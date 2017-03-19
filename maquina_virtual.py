@@ -2,7 +2,6 @@
 """
 Maquina virtual
 EC 208
-Alunos: Rodrigo Rufino e Márcio Rotella
 """
 PC = 0
 AC = 0
@@ -14,68 +13,77 @@ run_bit = True
 starting_adress = 0
 
 #vetores utilizados como exemplo
-memory = ["11110100001000"]
-values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-instr = ["00000000000000", "00000000000001", "00000000000010", "00000000000011"]
-# 00 adicao, 01 multiplicacao, 10 store, 11 load
+program_file = open('program.txt', 'r')
+memory = program_file.read().splitlines()
+values = [0, 1, 2, 3, 7, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+# 000 adicao, 001 multiplicacao, 010 mod, 011 pow, 100 store
 #4 bits dado A, 4 bits dado B, 4 bits local onde resultado e armazenado, 2 bits instrucao
 
 def get_instr_type(addr):
-    print(addr[12:] + " 24")
-    if addr[12:] == "00":
-        print("ADD")
+    if addr[12:] == "000":
         return "ADD"
-    elif addr[12:] == "01":
+    elif addr[12:] == "001":
         return "MUL"
-    elif addr[12:] == "10":
-        return "LOAD"
-    elif addr[12:] == "11":
+    elif addr[12:] == "010":
+        return "MOD"
+    elif addr[12:] == "011":
+        return "POW"
+    elif addr[12:] == "100":
         return "STORE"
     else:
         return "Instrucao nao encontrada"
 
 def find_data(instr, type):
-    A = int(instr[0:4], 2)
-    print(A)
-    B = int(instr[4:8], 2)
-    print(B)
-    C = int(instr[8:11], 2)
+    A = instr[0:4]
+    B = instr[4:8]
+    C = instr[8:11]
+    
     return [A, B, C]
 
 def execute(type, data):
     if type == "ADD":
-        print("43")
-        data[2] = data[0] + data[1]
-        print("ADD: %d = %d + % d" % (data[2],data[1],data[0]))
-        return data
+        A = values[int(data[0], 2)]
+        B = values[int(data[1], 2)]
+        C = values[int(data[2], 2)]
+        C = A + B
+        values[int(data[2], 2)] = C
+        print("ADD: %d = %d + % d" % (C,A,B))
     elif type == "MUL":
-        data[2] = data[0] * data[1]
-        return data
-    elif type == "LOAD":
-        data[2] = data[0] % data[1]
-        return data
+        A = values[int(data[0], 2)]
+        B = values[int(data[1], 2)]
+        C = values[int(data[2], 2)]
+        C = A * B
+        values[int(data[2], 2)] = C
+        print("MUL: %d = %d + % d" % (C,A,B))
+    elif type == "MOD":
+        A = values[int(data[0], 2)]
+        B = values[int(data[1], 2)]
+        C = values[int(data[2], 2)]        
+        C = A % B
+        values[int(data[2], 2)] = C
+        print("MOD: %d = %d mod %d" % (C,A,B))
+    elif type == "POW":
+        A = values[int(data[0], 2)]
+        B = values[int(data[1], 2)]
+        C = values[int(data[2], 2)]
+        C = A ** B
+        values[int(data[2], 2)] = C        
+        print("POW: %d = %d ^ % d" % (C,A,B))
     elif type == "STORE":
-        data[2] = data[0] ** data[1]
-        return data
+        A = int(raw_input("Store data: "))
+        values[int(data[0], 2)] = A
     else:
-        return "Instrucao nao encontrada"
-
-#def interpret(memory, starting_adress):
+        print "Instrucao nao encontrada"
+        
+#Interpreter
 PC = starting_adress
 while run_bit:
-    instr = memory[0]
+    print values
+    instr = memory[PC]
     PC = PC + 1
-    print("63")
     instr_type = get_instr_type(instr)
     data_loc = find_data(instr, instr_type)
     execute (instr_type, data_loc)
-    print(values)
+    print values
     if PC>=len(memory):
         run_bit = False
-            
-#    return
-
-#salvar C no vetor values
-#implementar outras instruções
-#testar mais de uma instrução
-#arquivo
