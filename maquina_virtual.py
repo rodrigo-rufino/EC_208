@@ -15,8 +15,13 @@ starting_adress = 0
 #vetores utilizados como exemplo
 program_file = open('program.txt', 'r')
 memory = program_file.read().splitlines()
-values = [0, 1, 2, 3, 7, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-
+variables = open('variables.txt', 'r+')
+values = variables.read().splitlines()
+variables.close()
+variables = open('variables.txt', 'w+')
+print values
+print 'AA'
+ 
 """
 últimos 3 bits definem o tipo da operação a ser executada
 000 adicao, 001 multiplicacao, 010 mod, 011 pow, 100 store
@@ -48,36 +53,37 @@ def find_data(instr, type):
 #função que, de acordo com a função selecionada, resolve uma operação diferente
 def execute(type, data_loc):
     if type == "ADD":
-        A = values[int(data_loc[0], 2)]
-        B = values[int(data_loc[1], 2)]
-        C = values[int(data_loc[2], 2)]
+        A = int(values[int(data_loc[0], 2)], 2)
+        B = int(values[int(data_loc[1], 2)], 2)
+        C = int(values[int(data_loc[2], 2)], 2)
         C = A + B
-        values[int(data_loc[2], 2)] = C
+        values[int(data_loc[2], 2)] = bin(C)[2:] 
+        print values[int(data_loc[2], 2)]
         print("ADD: %d = %d + % d" % (C,A,B))
     elif type == "MUL":
-        A = values[int(data_loc[0], 2)]
-        B = values[int(data_loc[1], 2)]
-        C = values[int(data_loc[2], 2)]
+        A = int(values[int(data_loc[0], 2)], 2)
+        B = int(values[int(data_loc[1], 2)], 2)
+        C = int(values[int(data_loc[2], 2)], 2)
         C = A * B
-        values[int(data_loc[2], 2)] = C
-        print("MUL: %d = %d + % d" % (C,A,B))
+        values[int(data_loc[2], 2)] = bin(C)[2:] 
+        print("MUL: %d = %d * % d" % (C,A,B))
     elif type == "MOD":
-        A = values[int(data_loc[0], 2)]
-        B = values[int(data_loc[1], 2)]
-        C = values[int(data_loc[2], 2)]        
+        A = int(values[int(data_loc[0], 2)], 2)
+        B = int(values[int(data_loc[1], 2)], 2)
+        C = int(values[int(data_loc[2], 2)], 2)       
         C = A % B
-        values[int(data_loc[2], 2)] = C
+        values[int(data_loc[2], 2)] = bin(C)[2:] 
         print("MOD: %d = %d mod %d" % (C,A,B))
     elif type == "POW":
-        A = values[int(data_loc[0], 2)]
-        B = values[int(data_loc[1], 2)]
-        C = values[int(data_loc[2], 2)]
+        A = int(values[int(data_loc[0], 2)], 2)
+        B = int(values[int(data_loc[1], 2)], 2)
+        C = int(values[int(data_loc[2], 2)], 2)
         C = A ** B
-        values[int(data_loc[2], 2)] = C        
+        values[int(data_loc[2], 2)] = bin(C)[2:]      
         print("POW: %d = %d ^ % d" % (C,A,B))
     elif type == "STORE":
         A = int(raw_input("Store data: "))
-        values[int(data_loc[0], 2)] = A
+        values[int(data_loc[0], 2)] = bin(A)[2:]
     else:
         print "Instrucao nao encontrada"
         
@@ -90,4 +96,11 @@ while run_bit:
     data_loc = find_data(instr, instr_type)
     execute (instr_type, data_loc)
     if PC>=len(memory):
-        run_bit = False
+        for i in values:
+            i = i.zfill(32)
+            print i
+            variables.write(i)
+            variables.write('\n')
+        variables.close()
+        program_file.close()
+        run_bit = False        
