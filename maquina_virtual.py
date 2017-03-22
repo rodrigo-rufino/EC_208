@@ -19,8 +19,6 @@ variables = open('variables.txt', 'r+')
 values = variables.read().splitlines()
 variables.close()
 variables = open('variables.txt', 'w+')
-print values
-print 'AA'
  
 """
 últimos 3 bits definem o tipo da operação a ser executada
@@ -98,7 +96,6 @@ while run_bit:
     if PC>=len(memory):
         for i in values:
             i = i.zfill(32)
-            print i
             variables.write(i)
             variables.write('\n')
         variables.close()
