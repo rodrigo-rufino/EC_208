@@ -2,7 +2,7 @@
 """
 Maquina virtual
 EC 208
-Rodrigo Ribeiro, Márcio Rotella, Pedro Moreira
+Rodrigo Ribeiro, Márcio Rotella, Pedro Moreira, Luísa
 """
 PC = 0
 AC = 0
