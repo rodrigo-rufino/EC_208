@@ -1,6 +1,6 @@
 #coding: utf-8
 """
-Maquina virtual
+Maquina virtual com Memória Cache
 EC 208
 Rodrigo Ribeiro, Márcio Rotella, Pedro Moreira, Luísa
 """
